@@ -9,6 +9,14 @@
   color: darkmagenta;
 }
 
+.inputData {
+  display: inline-block;
+  width: 200px;
+  height: 200px;
+  border-style: hidden;
+  margin: 50px;
+}
+
 
 
 
