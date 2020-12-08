@@ -3,4 +3,16 @@ body {
   margin: 0;
   padding: 0;
   font-family: Arial, Helvetica, sans-serif;
+  height: 100%;
+}
+
+.input {
+  display: inline;
+  background-color: transparent;
+  height: 150px;
+}
+
+.mainDivider {
+  background-color: rgb(238, 233, 223);
+  border-radius: 24px;
 }

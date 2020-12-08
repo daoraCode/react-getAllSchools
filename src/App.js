@@ -1,96 +1,72 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from "react";
+import "./App.css";
 
-/* Importation de librairie axios afin d'effectuer des requêtes HTTP dans l'application ReactJS */
-// import axios from 'axios';
-
-import './App.css';
-
-// lien API : https://api.schooldigger.com/v1/schools
-
-class App extends Component { 
-
-
-    /* - Informations/données (donnéees API de getAllSchools) 
-    à afficher quand le Composant utilise le render() est lancé */ 
-   constructor(props) {
-     super(props)
-      this.state = {
-      numberOfPages: '',
-      numberOfSchools: '',
-      schoolList: '' 
-     }
-   }
-
-   // méthode événementielle consacrée aux inputs
-   changeHandler = e => {
-      this.setState({ [e.target.name]: e.target.value })
-   }
-
-   // méthode événementielle consacrée aux envois
-   submitHandler = e => {
-     e.preventDefault() // pour éviter un rafraichissement de la page
-     console.log(this.state) // App.js:32 {numberOfPages: "", numberOfSchools: "", schoolList: ""}
-   }
-  
-
-
-  /* Méthode reponsable de l'interface, à ressemblera l'UI construite */
-render() {
-  /* Structure du code JSX, préparations */
-
-  // - destructuration des valeurs attribuées API définies dans le constructeurs
-
-  /* En créant une déstructuration : toute mes valeurs seront 
-  décomposées et équivaudront d'une certaine manière à une seule et même variable `this.state`, méthode permettant donc de raccourcir le code  */
-
-  const { numberOfPages, numberOfSchools, schoolList } = this.state; 
- // - ! placer defaultValue au lieu de value, auquel cas il y aura des erreurs ------------------ DESTRUCTURING
- // - le defautValue ne causera pas la mise à jour de la valeur initiale du DOM
-
-
-    return (
-      // Lignes de code JSX
-      <div className="mainTitle">
+/* librairie lodash javaScript pour modules node.js */ 
+import _ from 'lodash'
 
 
 
 
-        <form onSubmit={this.submitHandler}>
-          
-          <div className="inputData">
-
-          <input type="text" 
-          name="numberOfPages" 
-          defaultValue={numberOfPages} 
-          onChange={this.numberOfPages} />
-
-          </div>
+/* Import de la librairie axios pour utiliser les requêtes HTTP, 
+récupérer de la data, se connecter à l'API getAllSchools */
+import Axios from "axios";
 
 
-          <div className="inputData">
 
-          <input type="text" 
-          name="numberOfSchools" 
-          defaultValue={numberOfSchools} 
-          onChange={this.numberOfSchools} />
+/* Compsants principal */
+const App = () => {
 
-          </div>
-          
-          <div className="inputData">
+  /* - Utilisation du hook useState() : useState(initialState, setState), utilisation 
+  d'une valeur initiale et d'une fonction d'update pour cette valeur */
+  const [state, setState] = useState({});
 
-          <input 
-          type="text" 
-          name="schoolList" 
-          defaultValue={schoolList} 
-          onChange={this.schoolList} />
 
-          </div>
 
-          <button type="submit">Envoyer</button>
-        </form>    
+  /* - Utilisation du hook useEffect() : useEffect((effect(function)), (dependancy([]))) */
+  useEffect(() => {
+    fetchData();
+  });
+
+
+  /* Recherches de données (arrows method) - url and paramaters - retour de fonctions 
+  promesses pour récupérer les bonnes réponses URLs et les erreurs de réponses URLs grâce au .then() catch() */
+  const fetchData = async () => {
+    const appKey = "afcfd1b6ca056f4c03e8fec5b3fdc984";
+    const appID = "e34ae722"
+    const st = "LA";
+    Axios.get(`https://api.schooldigger.com/v1.2/schools?st=${st}&appID=${appID}&appKey=${appKey}`)
+      .then((res) => {
+      setState(res.data)
+    })
+      .then((res) => {
+      console.log(res)
+    })
+
+  };
+
+  //
+//
+  return (
+    
+    // Lignes JSX
+    <div className="mainDivider">
+
+      {_.isEmpty(state) ? "Chargement" : (
+
+      <div>
+      <h1 className="title">Recherches d'Informations par états - getAllSchools</h1>
+      <p>NOM DE L'ECOLE : ${state.schoolList[0].schoolName}</p>
+
+      <input className={"input"} />
+      <button className="button">Obtenir</button>
       </div>
-    )
-  }
-}
+      
+      )}
+      
+    </div>
+  );
+};
+
+
 
 export default App;
